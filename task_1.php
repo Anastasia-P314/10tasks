@@ -45,7 +45,12 @@
                                     </div>
 
                                     <?php
-                                    $listGroup = array('Reports', 'Analytics', 'Export', 'Storage');
+                                    $listGroup = array(
+                                        ['reports file','Reports'], 
+                                        ['analytics graphs','Analytics'], 
+                                        ['export download','Export'], 
+                                        ['storage','Storage']
+                                    );
                                     ?>
 
                                     <ul id="js-list-msg" class="list-group px-2 pb-2 js-list-filter">
@@ -53,7 +58,7 @@
                                             foreach ($listGroup as $i)
                                             {?>
                                             <li class="list-group-item">
-                                                <span data-filter-tags="reports file"><?php echo $i?></span>
+                                                <span data-filter-tags="<?php echo $i[0]?>"><?php echo $i[1]?></span>
                                             </li>
                                             <?php
                                             }
