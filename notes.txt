@@ -1,11 +1,12 @@
+Перед просмотром видео-решения:
 1 - ok
-
 2 - ok (нужно в правильном месте закрывать foreach(){}!)
 3 - ok
 4 - ok (оптимально ли? Один массив, хотя хотелось разделить на 2 массива - контент и стили. Но нельзя сделать foreach($data as $d AND $styles as $s), а вложенные циклы перемножают результат..)
 5 - ok
 6 - ok (in_array сработал. А array_search почему нет?)
-7 - ok (*сложность была при создании таблицы - неправильно написала название колонки alt_name вместо altname **непонятно где закрывать connection mysql ***чем отличается mysql_multi_query от mysql_query **** если изначально таблица в бд не создана, не забыть потом подключиться к бд mysqli_select_db($connection,'marlin') ***** чтобы не записывать данные в таблицу повторно, сделать какое-то поле UNIQUE, чтобы потом добавить INSERT IGNORE)
+7 - ok (*сложность была при создании таблицы - неправильно написала название колонки alt_name вместо altname **непонятно где закрывать connection mysql ***чем отличается mysql_multi_query от mysql_multi_query **** если изначально таблица в бд не создана, не забыть потом подключиться к бд mysqli_select_db($connection,'marlin') ***** чтобы не записывать данные в таблицу повторно, сделать какое-то поле UNIQUE, чтобы потом добавить INSERT IGNORE)
+mysqli_close($connection); Если обязательно закрывать, то где? в конце документа или блока? 
 8 - ok (*"CREATE TABLE IF NOT EXISTS task8_table (
 `#` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 ... 
@@ -13,3 +14,21 @@
 ** вместо UNIQUE проверка на уникальность иначе: )
 9 - ok (*нужно дать имя кнопке name = name ="submitButton" и тексту "submitText", чтобы обращаться $_POST['submitButton'] ** присвоить форме <form method = "POST" action="">, если action = "", остаемся на той же странице)
 10 - ok (*убрать возможность отправить пустую строку NOT NULL при создании таблицы)
+
+
+После просмотра видео-решения: 
+* в array лучше использовать ключи =>, а не индексы
+1 - поняла, что не обратила внимания на проверку работоспособности фильтра => сделала замену тэгов, исправила, обновила репозиторий git add ./commit -m""/push
+Оказывается, можно использовать не только foreach(){}, но и foreach():... endforeach. Удобнее!
+5 - аналогично if(){} и if(): ...endif
+6 - можно и сокращенно прописать условие: in_array($a[1], $banned_users) ? echo 'banned' : ''; вместо if(in_array($a[1], $banned_users)){echo 'banned';}
+И вместо того, чтобы создавать отдельный список из забаненных пользователей, можно было каждого пользователю прописать доп параметр 'status'. Интересно, как лучше? 
+7 - по умолчанию ставить длину varchar 255 
+Подключение к базе данных через $connection = new pdo(), а не mysqli_connect('localhost','root','')? Потом $statement = $connection->prepare("SELECT .."); $statement->execute(); $people = $statement->fetchAll(PDO::FETCH_ASSOC). Этот способ кажется менее удобным, чем foreach & mysqli_query 
+9 - вместо того, чтобы вставлять переменную в sql запрос "INSERT INTO task9_table (submit_text) VALUES ('$message')" нужно ставить метку VALUES (:submit_text)
+$statement = $connection->prepare("SELECT .."); 
+$statement->execute(['submit_text'=> $message])
+Если несколько полей, то и меток несколько "INSERT INTO task9_table (submit_text, username) VALUES (:submit_text, :username)"
+** обязательно создавать отдельный файл-обработчик save.php? 
+10 - вместо if($_POST['submitText'] == NULL) можно if(!empty('check'))
+Нужно записывать в SESSION, вывести и затем удалить unset()? Разобраться
