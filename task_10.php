@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+//var_dump($_SESSION); die;
+
 $connection = mysqli_connect('localhost','root','','marlin');
 
 $new_table = "CREATE TABLE IF NOT EXISTS task9_table (
@@ -47,27 +50,20 @@ mysqli_query($connection,$new_table);
                             <div class="panel-content">
                                 <div class="form-group">
 
-                                    <?php 
-                                    if(isset($_POST['submitButton']) && $_POST['submitText'] != NULL){
-                                        $message= $_POST['submitText'];
-                                        $check = mysqli_query($connection,"SELECT * FROM task9_table WHERE submit_Text = '$message'"); 
-                                        if(is_null(mysqli_fetch_assoc($check))){
-                                            mysqli_query($connection, "INSERT INTO task9_table (submit_text) VALUES ('$message')");} 
-                                            else {
-                                    ?>
 
+                                    <?php if(isset($_SESSION['message'])): ?>
                                     <div class="alert alert-danger fade show" role="alert">
-                                        You should check in on some of those fields below.
+                                        <?php 
+                                        echo $_SESSION['message']; unset($_SESSION['message']); 
+                                        ?>
                                     </div>
+                                    <?php endif; ?>
 
-                                    <?php                                    }            
-                                    };
-                                    ?>
 
-                                    <form method = "POST" action="">
+                                    <form method = "POST" action="save.php">
                                         <label class="form-label" for="simpleinput">Text</label>
                                         <input type="text" id="simpleinput" class="form-control" name = "submitText">
-                                        <button class="btn btn-success mt-3" name ="submitButton">Submit</button>
+                                        <button class="btn btn-success mt-3" type="submit">Submit</button>
                                     </form>
                                 </div>
                             </div>
